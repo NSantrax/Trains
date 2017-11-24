@@ -1,26 +1,28 @@
+
 require_relative  './module'
 require_relative  './module_counter'
 require_relative  './module_valid'
+
 class Car
-  include Manufacturer # Включен модуль
-  include InstanceCounter # 5 Усложненное
+  include Manufacturer
+  include InstanceCounter
   include Valid
 
   variable_zero
 
   def initialize
-    register_instance # 5 Усложненное
+    register_instance
   end
 
-  def validate! #!!! А СМЫСЛ ЭТОЙ ПРОВЕРКИ? ArgumentError? Лучше другой тип ошибки использовать
+  def validate!
     raise ArgumentError, 'Указанные объекты не являются железнодорожными вагонами' if self.class != Car
   end
 end
 
 class PassengerCar < Car
   include Manufacturer
-  include InstanceCounter # 5 Усложненное
-  include Valid #!!! Если включен в Car, то можно не указывать
+  include InstanceCounter
+  include Valid
 
   variable_zero
 
@@ -30,8 +32,8 @@ class PassengerCar < Car
 end
 
 class CargoCar < Car
-  include Manufacturer # Включен модуль
-  include InstanceCounter # 5 Усложненное
+  include Manufacturer
+  include InstanceCounter
   include Valid
 
   variable_zero

@@ -5,9 +5,9 @@
 # Может выводить список всех станций по-порядку от начальной до конечной
 
 class Route
-  attr_reader :base_station, :end_station 
+  attr_reader :base_station, :end_station
 
-  def initialize(base_station, end_station)  
+  def initialize(base_station, end_station)
     @base_station = base_station
     @end_station = end_station
     @stations_list = [base_station, end_station]
@@ -25,11 +25,11 @@ class Route
   attr_reader :stations_list
 
   def add_station(station)
-    raise ArgumentError, 'Указанный объект не являются железнодорожной станцией' if station.class != RailwayStation #- Для класса маршрута сдела # валидацию на то, что при добавлении станций объекты имеют тип (класс) RailwayStation (или как он у вас называется).ть
+    raise ArgumentError, 'Указанный объект не являются железнодорожной станцией' if station.class != RailwayStation
     @stations_list.insert(1, station)
     list
-    validate! #- Для класса маршрута сделать валидацию на то, что при добавлении станций объекты имеют тип (класс) RailwayStation (или как он у вас называется).
-    p 'станция добавлена'
+    validate!
+    p 'Cтанция добавлена'
   end
 
   def delete_station(name)

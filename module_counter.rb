@@ -13,9 +13,6 @@ module InstanceCounter
   module ClassMetods
     def variable_zero
       @instances = 0
-      #!!! запись @instances ||= 0 означает что если @instances не определен, то установить в 0, в противном случае вернуть значение @instances. Заодно можем избавиться от метода instances.
-       # А что будет при перезапуске в irb? Значение не обнулится и будет считатьсро методя дальше? 
-       # Про метод instances - не хотела у меня вызываться переменная, только через метод, и в поездах тоже куча таких методов
     end
 
     def variable
@@ -29,6 +26,7 @@ module InstanceCounter
 
   module InstanceMetods
     protected
+
     def register_instance
       self.class.variable
     end

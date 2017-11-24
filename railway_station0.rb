@@ -5,11 +5,11 @@ require_relative './module_valid'
 class RailwayStation
   include Valid
 
-  NAME_FORMAT = /^[a-z0-9-]+$/i 
+  NAME_FORMAT = /^[a-z0-9-]+$/i
 
   attr_reader :name
 
-  @@stations = [] 
+  @@stations = []
 
   def self.all
     @@stations
@@ -18,16 +18,16 @@ class RailwayStation
   def initialize(name)
     @name = name
     @trains = { PassengerTrain: [], CargoTrain: [] }
-    @@stations << @name 
-    validate! 
+    @@stations << @name
+    validate!
   end
 
-  def blocks (&block) #У класса RailwayStation написать метод, который принимает блок и выполняет действия из блока над каждым поездом (Train), находящимся в данный момент на станции.
-    raise ArgumentError, 'На станции нет поездов' if @trains[:PassengerTrain].empty?  &&  @trains[:CargoTrain].empty?
+  def blocks
+    raise ArgumentError, 'На станции нет поездов' if @trains[:PassengerTrain].empty? && @trains[:CargoTrain].empty?
     if block_given?
-      @trains[:PassengerTrain].each { |train| yield(train) } 
+      @trains[:PassengerTrain].each { |train| yield(train) }
       @trains[:CargoTrain].each { |train| yield(train) }
-    else p "Блок не задан"
+    else p 'Блок не задан'
     end
   end
 

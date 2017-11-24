@@ -13,19 +13,21 @@
 require_relative './railway_station0'
 require_relative './route0'
 require_relative './train1'
-# require_relative './train/cargo_train'
-# require_relative './train/passenger_train'
 require_relative './car0'
-# require_relative './car/cargo_car'
-# require_relative './car/passenger_car'
 require_relative  './module'
 require_relative  './module_counter'
 require_relative  './module_valid'
+
 class Main
-  MENU_ACTIONS = { 0 => [:menu, 'меню'], 1 => [:train_new, 'создать новый поезд'], 2 => [:station_new, 'создать новую станцию'], 3 => [:route_new, 'создать новый маршрут'], 4 => [:train_all, 'показать список поездов'],
-                   5 => [:station_all, 'показать список станций'], 6 => [:station_list, 'показать список поездов на станции'], 7 => [:station_take_train, 'отправить поезд на станцию'],
-                   8 => [:move_train, 'переместить поезд'], 9 => [:train_attach_car, 'прицепить вагон к поезду'], 10 => [:train_unhook_car, 'отцепить вагон от поезда'], 11 => [:make_route, 'задать маршрут поезду'],
-                   12 => [:add_station_route, 'добавить станцию к маршруту'], 13 => [:exit, 'выход'], 14 => [:block_station, 'блок для станции'], 15 => [:block_train, 'блок для поезда'] }.freeze
+  MENU_ACTIONS = { 0 => [:menu, 'меню'], 1 => [:train_new, 'создать новый поезд'],
+                   2 => [:station_new, 'создать новую станцию'], 3 => [:route_new, 'создать новый маршрут'],
+                   4 => [:train_all, 'показать список поездов'], 5 => [:station_all, 'показать список станций'],
+                   6 => [:station_list, 'показать список поездов на станции'], 7 => [:station_take_train, 'отправить поезд на станцию'],
+                   8 => [:move_train, 'переместить поезд'], 9 => [:train_attach_car, 'прицепить вагон к поезду'],
+                   10 => [:train_unhook_car, 'отцепить вагон от поезда'], 11 => [:make_route, 'задать маршрут поезду'],
+                   12 => [:add_station_route, 'добавить станцию к маршруту'], 13 => [:exit, 'выход'],
+                   14 => [:block_station, 'блок для станции'], 15 => [:block_train, 'блок для поезда'] }.freeze
+
   def initialize
     @stations = []
     @routes  =  []
@@ -92,7 +94,6 @@ class Main
     p 'Придумайте номер поезда'
     number = gets.chomp
     raise ArgumentError, 'Поезд с таким номером уже существует, придумайте другой' if @trains.key?(number)
-    #- Добавить валидацию (с выбросом исключения) на глобальную уникальность номера поезда. То есть, нельзя создать 2 объекта класса Train с одинаковым номером.
     loop do
       puts 'Выберите тип поезда: 1 - пассажирский, 2 - товарный'
       @type = gets.chomp.to_i
@@ -101,10 +102,9 @@ class Main
     end
     puts 'Выберите количесиво вагонов'
     number_cars = gets.chomp
-    @trains[number]  =  PassengerTrain.new(number, number_cars) if @type == 1
-    @trains[number]  =  CargoTrain.new(number, number_cars) if @type ==  2
+    @trains[number] = PassengerTrain.new(number, number_cars) if @type == 1
+    @trains[number] = CargoTrain.new(number, number_cars) if @type == 2
     p "Поезд #{number} успешно создан"
-    #p @trains[number] # Просмотр поезда
     menu
   rescue ArgumentError => e
     p e.inspect
@@ -202,31 +202,31 @@ class Main
     menu
   end
 
-  def make_route 
+  def make_route
     select_train
     select_route
     @train.make_route(@route)
-    p 'Поезду задан выбранный маршрут '
+    p 'Поезду задан выбранный маршрут'
     menu
   end
 
   def block_station
     select_station
     @station = @stations[@index]
-    block = lambda {|x| x.attach_car} #Этоблок, который прицепляет вагоны к каждому поезду на станции
+    block = ->(x) { x.attach_car }
     @station.blocks(&block)
-    p "Вагоны прицеплены"
+    p 'Вагоны прицеплены'
     menu
   end
 
   def block_train
     select_train
-    block  =  Proc.new { |car, id| p "#{id+=1} - #{car.class}" } #Этоблок, который показывает номер вагонов и их класс в поезде
+    block = proc { |car, id| p "#{id += 1} - #{car.class}" }
     @train.block_trains(&block)
     menu
   end
 
-  def add_station_route 
+  def add_station_route
     select_route
     select_station
     @station = @stations[@index]

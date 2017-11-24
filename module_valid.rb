@@ -1,5 +1,5 @@
 module Valid
-  def valid? # Проверка формата номера поезда и количества вагонов
+  def valid?
     validate!
     true
   rescue
